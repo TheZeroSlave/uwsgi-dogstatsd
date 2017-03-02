@@ -122,6 +122,7 @@ static int dogstatsd_send_metric(struct uwsgi_buffer *ub, struct uwsgi_stats_pus
   memset(datadog_tags, 0, MAX_BUFFER_SIZE);
   memset(custom_tags_str, 0, MAX_BUFFER_SIZE);
   memset(datatog_metric_name, 0, MAX_BUFFER_SIZE);
+  memset(ub->buf, 0, ub->len);
 
   // let's copy original metric name before we start
   strncpy(raw_metric_name, metric, metric_len + 1);
