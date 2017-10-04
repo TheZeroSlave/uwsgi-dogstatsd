@@ -186,6 +186,8 @@ static void stats_pusher_dogstatsd(struct uwsgi_stats_pusher_instance *uspi, tim
   if (!uspi->configured) {
     struct dogstatsd_node *sn = uwsgi_calloc(sizeof(struct dogstatsd_node));
 
+    uwsgi_log("********************stats pusher called ***************")
+
     char *comma = strchr(uspi->arg, ',');
     char *pipe = strchr(uspi->arg, '|');
     bool has_prefix = false;
