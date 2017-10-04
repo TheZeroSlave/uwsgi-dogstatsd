@@ -171,7 +171,13 @@ static int dogstatsd_send_metric(struct uwsgi_buffer *ub, struct uwsgi_stats_pus
       strncat(custom_tags_str, sn->custom_tags[i], sn->custom_tag_lens[i]);
     }
     uwsgi_log_alarm(" complete %s\n", custom_tags_str);
-    if (uwsgi_buffer_append(ub, custom_tags_str, strlen(custom_tags_str))) return -1;
+    uwsgi_log_alarm(" complete buffer %s\n", ub->buf);
+
+    if (uwsgi_buffer_append(ub, custom_tags_str, strlen(custom_tags_str)))
+    {
+      uwsgi_error("append error");
+      return -1;
+    }
   }
 
   if (sendto(sn->fd, ub->buf, ub->pos, 0, (struct sockaddr *) &sn->addr.sa_in, sn->addr_len) < 0) {
