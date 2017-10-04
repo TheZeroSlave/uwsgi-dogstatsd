@@ -147,10 +147,13 @@ static int dogstatsd_send_metric(struct uwsgi_buffer *ub, struct uwsgi_stats_pus
   if (uwsgi_buffer_num64(ub, value)) return -1;
   if (uwsgi_buffer_append(ub, type, 2)) return -1;
 
+  uwsgi_log_alarm(" complete buffer before dog_tags %s %d\n ", ub->buf, ub->pos);
+
   // add tags metadata if there are any
   if (extracted_tags) {
     if (uwsgi_buffer_append(ub, datadog_tags, strlen(datadog_tags))) return -1;
   }
+  uwsgi_log_alarm(" data_dogs=%s %d\n", datadog_tags, strlen(datadog_tags));
   uwsgi_log_alarm(" custom_tags=%s\n", sn->custom_tags[0]);
   // add any custom tags
   if (sn->custom_tags[0] != NULL){
@@ -171,7 +174,7 @@ static int dogstatsd_send_metric(struct uwsgi_buffer *ub, struct uwsgi_stats_pus
       strncat(custom_tags_str, sn->custom_tags[i], sn->custom_tag_lens[i]);
     }
     uwsgi_log_alarm(" complete %s\n", custom_tags_str);
-    uwsgi_log_alarm(" complete buffer %s\n", ub->buf);
+    uwsgi_log_alarm(" complete buffer %s %d\n ", ub->buf, ub->pos);
 
     if (uwsgi_buffer_append(ub, custom_tags_str, strlen(custom_tags_str)))
     {
